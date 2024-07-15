@@ -14,21 +14,22 @@ namespace i3 {
 
         ///Logger stream class for streaming to multiple streams.
         class Logger {
-            vector<shared_ptr<ostream>> streams;   ///<Streams which are attached.
+            vector<ostream*> streams;   ///<Streams which are attached.
 
         public:
             ///Attach a stream.
             ///@attention Currently, streams can not be detached.
-            void attachStream(shared_ptr<ostream> pStream) {
-                streams.push_back(pStream);
+            void attach(ostream &stream) {
+                streams.push_back(&stream);
             }
 
             ///Stream a value to all attached streams.
             template<typename T>
             Logger& operator<<(T& x) {
-                foreach(auto p : streams) {
+                for (auto p : streams) {
                     *p << x;
                 }
+                return *this;
             }
         };
     } //namespace core
