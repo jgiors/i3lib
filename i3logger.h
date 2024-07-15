@@ -23,8 +23,8 @@ namespace i3 {
         ///Stream a value to all attached streams.
         template<typename T>
         Logger& operator<<(T& x) {
-            foreach(auto pS : streams) {
-                *pS << x;
+            foreach(auto p : streams) {
+                *p << x;
             }
         }
     };
