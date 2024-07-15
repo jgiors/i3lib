@@ -15,7 +15,6 @@ namespace i3 {
         vector<shared_ptr<ostream>> streams;   ///<Streams which are attached.
 
     public:
-
         ///Attach a stream.
         ///@attention Currently, streams can not be detached.
         void attachStream(shared_ptr<ostream> pStream) {
