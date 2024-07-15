@@ -14,7 +14,8 @@ namespace i3 {
     class Logger {
         vector<shared_ptr<ostream>> streams;   ///<Streams which are attached.
     public:
-        ///Attach a stream. The stream is not owned by this object, but must not destruct during this object's lifetime.
+        ///Attach a stream.
+        ///@attention Currently, streams can not be detached.
         void attachStream(shared_ptr<ostream> pStream) {
             streams.push_back(pStream);
         }
