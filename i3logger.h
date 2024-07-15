@@ -13,7 +13,9 @@ namespace i3 {
     ///Logger stream class for streaming to multiple streams.
     class Logger {
         vector<shared_ptr<ostream>> streams;   ///<Streams which are attached.
+
     public:
+
         ///Attach a stream.
         ///@attention Currently, streams can not be detached.
         void attachStream(shared_ptr<ostream> pStream) {
