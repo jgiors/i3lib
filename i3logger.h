@@ -1,5 +1,6 @@
 #ifndef I3LOGGER_H
 #define I3LOGGER_H
+///@file
 
 #include <memory>
 #include <vector>
