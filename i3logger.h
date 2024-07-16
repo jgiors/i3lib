@@ -28,7 +28,7 @@ namespace i3 {
             std::vector<std::ostream*> streams;   ///<Streams which are attached.
 
         public:
-            MultiStream() = delete;
+            MultiStream() {}
             MultiStream(std::initializer_list<std::ostream*> _streams) : streams(_streams) {}
 
             ///Stream a value to all attached streams.
@@ -43,6 +43,7 @@ namespace i3 {
 
         ///Primary logger class. Use the global instances (below) for logging.
         class Logger {
+            static MultiStream dummyMultiStream;
             std::string prefix;
             bool bWritten{ false };
         public:
@@ -54,7 +55,7 @@ namespace i3 {
             template<typename T>
             MultiStream& operator<<(T &x) {
                 if (!pMultiStream)
-                    return *this;
+                    return dummyMultiStream;
 
                 if (!bWritten) {
                     *pMultiStream << "\n";
