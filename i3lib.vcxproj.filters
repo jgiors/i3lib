@@ -19,4 +19,12 @@
       <Filter>Header Files</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="i3defs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="i3lib.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
 </Project>

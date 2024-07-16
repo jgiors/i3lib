@@ -9,7 +9,7 @@
 
 ///Log stream.
 ///@note "Log" is capitalized to prevent collision with mathematical log() function.
-i3::core::Logger Log;
+i3::core::MultiLogger Log;
 
 int main()
 {

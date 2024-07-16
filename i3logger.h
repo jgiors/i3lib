@@ -13,7 +13,7 @@ namespace i3 {
         using std::ostream;
 
         ///Logger stream class for streaming to multiple streams.
-        class Logger {
+        class MultiLogger {
             vector<ostream*> streams;   ///<Streams which are attached.
 
         public:
@@ -25,7 +25,7 @@ namespace i3 {
 
             ///Stream a value to all attached streams.
             template<typename T>
-            Logger& operator<<(T& x) {
+            MultiLogger& operator<<(T& x) {
                 for (auto p : streams) {
                     *p << x;
                 }
