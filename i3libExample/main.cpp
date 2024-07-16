@@ -7,12 +7,12 @@
 
 #include <iostream>
 
-///Log stream.
-///@note "Log" is capitalized to prevent collision with mathematical log() function.
-i3::core::MultiStream Log;
+using i3::core::MultiStream;
+using i3::core::Log;
 
 int main()
 {
-    Log.attach(std::cerr);
+    Log.pMultiStream = std::shared_ptr<MultiStream>(new MultiStream{ &std::cerr });
     Log << "Hello World!\n";
+    return 0;
 }

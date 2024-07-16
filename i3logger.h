@@ -2,7 +2,9 @@
 #define I3LOGGER_H
 ///@file
 
+#include <Windows.h>
 #include <memory>
+#include <initializer_list>
 #include <vector>
 #include <string>
 #include <sstream>
@@ -13,8 +15,10 @@ namespace i3 {
         struct DebugStream {
             ///Stream to debug window or other appropriate stream.
             template<typename T>
-            MultiStream& operator<<(T& x) {
-                std::ostringstream
+            DebugStream& operator<<(T& x) {
+                std::ostringstream s;
+                s << x;
+                OutputDebugStringA(s.str().c_str());
                 return *this;
             }
         };
@@ -24,11 +28,8 @@ namespace i3 {
             std::vector<std::ostream*> streams;   ///<Streams which are attached.
 
         public:
-            ///Attach a stream. The stream is not owned by the MultiLogger and must remain valid.
-            ///@attention Currently, streams can not be detached.
-            void attach(ostream &stream) {
-                streams.push_back(&stream);
-            }
+            MultiStream() = delete;
+            MultiStream(std::initializer_list<std::ostream*> _streams) : streams(_streams) {}
 
             ///Stream a value to all attached streams.
             template<typename T>
@@ -42,32 +43,37 @@ namespace i3 {
 
         ///Primary logger class. Use the global instances (below) for logging.
         class Logger {
-            MultiStream multiStream;
             std::string prefix;
-            bool bWritten;
+            bool bWritten{ false };
         public:
+            std::shared_ptr<MultiStream> pMultiStream{ NULL };
+
             Logger() = delete;
             Logger(std::string _prefix) : prefix(_prefix) {}
 
             template<typename T>
             MultiStream& operator<<(T &x) {
+                if (!pMultiStream)
+                    return *this;
+
                 if (!bWritten) {
-                    multiStream << "\n";
+                    *pMultiStream << "\n";
                     bWritten = true;
                 }
                 ///@todo write file and line
-                multiStream << prefix;
-                return multiStream << x;
+                *pMultiStream << prefix;
+                *pMultiStream << x;
+                return *pMultiStream;
             }
         };
 
-        Logger Log;         ///<Log a normal info message.
-        Logger LogWarning;  ///<Log a warning.
-        Logger LogError;    ///<Log an error.
+        extern Logger Log;         ///<Log a normal info message.
+        extern Logger LogWarning;  ///<Log a warning.
+        extern Logger LogError;    ///<Log an error.
         ///Log a debug message.
         ///@attention This logger always exists (but might not be directed to any stream).
         ///           To disable in debug builds, wrap inside I3DEBUG_ONLY() macro.
-        Logger LogDebug;
+        extern Logger LogDebug;
     } //namespace core
 } //namespace i3
 
