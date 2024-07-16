@@ -12,12 +12,12 @@ namespace i3 {
         using std::vector;
         using std::ostream;
 
-        ///Logger stream class for streaming to multiple streams.
-        class MultiLogger {
+        ///Stream class for streaming to multiple streams.
+        class MultiStream {
             vector<ostream*> streams;   ///<Streams which are attached.
 
         public:
-            ///Attach a stream.
+            ///Attach a stream. The stream is not owned by the MultiLogger and must remain valid.
             ///@attention Currently, streams can not be detached.
             void attach(ostream &stream) {
                 streams.push_back(&stream);
@@ -25,7 +25,7 @@ namespace i3 {
 
             ///Stream a value to all attached streams.
             template<typename T>
-            MultiLogger& operator<<(T& x) {
+            MultiStream& operator<<(T& x) {
                 for (auto p : streams) {
                     *p << x;
                 }
