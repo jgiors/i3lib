@@ -18,6 +18,9 @@
     <ClCompile Include="i3logger.h">
       <Filter>Header Files</Filter>
     </ClCompile>
+    <ClCompile Include="i3logger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="i3defs.h">
