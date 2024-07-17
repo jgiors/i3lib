@@ -43,7 +43,7 @@ namespace i3 {
                     template<typename T>
                     PrintGroup& operator<<(T t) {
                         std::string s(t);
-                        for (Printer p : pPrinters) {
+                        for (auto &p : pPrinters) {
                             p->print(s);
                         }
                         return *this;

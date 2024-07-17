@@ -7,12 +7,12 @@
 
 #include <iostream>
 
-using i3::core::MultiStream;
-using i3::core::Log;
+using i3::core::logger::Log;
 
 int main()
-{
-    Log.pMultiStream = std::shared_ptr<MultiStream>(new MultiStream{ &std::cerr });
+{   
+    Log.attachStream(std::cerr);
+    Log.attachDebugPrint();    
     Log << "Hello World!\n";
     return 0;
 }
