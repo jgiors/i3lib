@@ -10,6 +10,8 @@
 #include <string>
 #include <sstream>
 
+///@todo complete documentation in this file
+
 namespace i3 {
     namespace core {
         namespace logger {
@@ -75,6 +77,8 @@ namespace i3 {
                     return printGroup;
                 }
             };
+
+            ///@todo add macros to turn these on/off
 
             extern Logger Log;         ///<Log a normal info message.
             extern Logger LogWarning;  ///<Log a warning.

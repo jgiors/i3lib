@@ -9,10 +9,14 @@
 
 using i3::core::logger::Log;
 
+namespace {
+
+} //anonymous namespace
+
 int main()
 {   
+    Log.attachDebugPrint();
     Log.attachStream(std::cerr);
-    Log.attachDebugPrint();    
     Log << "Hello World!\n";
     return 0;
 }
