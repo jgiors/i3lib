@@ -6,6 +6,7 @@
 #include <memory>
 #include <initializer_list>
 #include <vector>
+#include <tuple>
 #include <string>
 #include <sstream>
 
@@ -23,27 +24,37 @@ namespace i3 {
             }
         };
 
-        ///Stream class for streaming to multiple streams.
+        ///Stream class for streaming to multiple stream-like objects.
+        template<typename... T>
         class MultiStream {
-            std::vector<std::ostream*> streams;   ///<Streams which are attached.
+            std::tuple<T...> streams;   ///<Attached stream-like objects.
+
+            template<int N>
+            void print(std::string s) {
+                print<N-1>(s);
+                std::get<N-1>(streams) << s;
+            }
+
+            template<>
+            void print<0>(std::string s) {}
 
         public:
             MultiStream() {}
-            MultiStream(std::initializer_list<std::ostream*> _streams) : streams(_streams) {}
+            //MultiStream(std::tuple<T...> _streams) : streams(_streams) {}
+            MultiStream(T... _streams) : streams(_streams) {}
 
             ///Stream a value to all attached streams.
-            template<typename T>
-            MultiStream& operator<<(T &x) {
-                for (auto p : streams) {
-                    *p << x;
-                }
+            template<typename Value>
+            MultiStream& operator<<(Value v) {
+                std::string s(v);
+                print<std::tuple_size<decltype(streams)>::value>(s);
                 return *this;
             }
         };
 
         ///Primary logger class. Use the global instances (below) for logging.
         class Logger {
-            static MultiStream dummyMultiStream;
+            //static MultiStream dummyMultiStream;
             std::string prefix;
             bool bWritten{ false };
         public:
@@ -54,8 +65,9 @@ namespace i3 {
 
             template<typename T>
             MultiStream& operator<<(T &x) {
-                if (!pMultiStream)
-                    return dummyMultiStream;
+                ///@todo Add a dummy stream to use in this case, a dummy multistream does not work because it should be tmplated
+                //if (!pMultiStream)
+                //    return dummyMultiStream;
 
                 if (!bWritten) {
                     *pMultiStream << "\n";
