@@ -12,81 +12,78 @@
 
 namespace i3 {
     namespace core {
+        namespace logger {
+            ///Abstract base for printing a string.
+            struct Printer {
+                virtual void print(std::string s) = 0;
+            };
 
-        struct DebugStream {
-            ///Stream to debug window or other appropriate stream.
-            template<typename T>
-            DebugStream& operator<<(T& x) {
-                std::ostringstream s;
-                s << x;
-                OutputDebugStringA(s.str().c_str());
-                return *this;
-            }
-        };
-
-        ///Stream class for streaming to multiple stream-like objects.
-        template<typename... T>
-        class MultiStream {
-            std::tuple<T...> streams;   ///<Attached stream-like objects.
-
-            template<int N>
-            void print(std::string s) {
-                print<N-1>(s);
-                std::get<N-1>(streams) << s;
-            }
-
-            template<>
-            void print<0>(std::string s) {}
-
-        public:
-            MultiStream() {}
-            //MultiStream(std::tuple<T...> _streams) : streams(_streams) {}
-            MultiStream(T... _streams) : streams(_streams) {}
-
-            ///Stream a value to all attached streams.
-            template<typename Value>
-            MultiStream& operator<<(Value v) {
-                std::string s(v);
-                print<std::tuple_size<decltype(streams)>::value>(s);
-                return *this;
-            }
-        };
-
-        ///Primary logger class. Use the global instances (below) for logging.
-        class Logger {
-            //static MultiStream dummyMultiStream;
-            std::string prefix;
-            bool bWritten{ false };
-        public:
-            std::shared_ptr<MultiStream> pMultiStream{ NULL };
-
-            Logger() = delete;
-            Logger(std::string _prefix) : prefix(_prefix) {}
-
-            template<typename T>
-            MultiStream& operator<<(T &x) {
-                ///@todo Add a dummy stream to use in this case, a dummy multistream does not work because it should be tmplated
-                //if (!pMultiStream)
-                //    return dummyMultiStream;
-
-                if (!bWritten) {
-                    *pMultiStream << "\n";
-                    bWritten = true;
+            ///Print to the debug stream. On Windows, prints to debug output/window.
+            struct DebugPrinter : public Printer {
+                virtual void print(std::string s) {
+                    OutputDebugStringA(s.c_str());
                 }
-                ///@todo write file and line
-                *pMultiStream << prefix;
-                *pMultiStream << x;
-                return *pMultiStream;
-            }
-        };
+            };
 
-        extern Logger Log;         ///<Log a normal info message.
-        extern Logger LogWarning;  ///<Log a warning.
-        extern Logger LogError;    ///<Log an error.
-        ///Log a debug message.
-        ///@attention This logger always exists (but might not be directed to any stream).
-        ///           To disable in debug builds, wrap inside I3DEBUG_ONLY() macro.
-        extern Logger LogDebug;
+            ///Print to a debug stream.
+            class StreamPrinter : public Printer {
+                std::ostream &stream;
+            public:
+                StreamPrinter(std::ostream &_stream) : stream(_stream) {}
+                virtual void print(std::string s) {
+                    stream << s;
+                }
+            };
+
+            ///Primary logger class. Use the global instances (below) for logging.
+            class Logger {
+                struct PrintGroup {
+                    std::vector<std::unique_ptr<Printer>> pPrinters;
+                
+                    template<typename T>
+                    PrintGroup& operator<<(T t) {
+                        std::string s(t);
+                        for (Printer p : pPrinters) {
+                            p->print(s);
+                        }
+                        return *this;
+                    }
+                };
+
+                PrintGroup printGroup;
+                std::string prefix;
+                bool bWritten{ false };
+            public:
+                Logger() = delete;
+                Logger(std::string _prefix) : prefix(_prefix) {}
+
+                void attachStream(std::ostream &_stream) {
+                    printGroup.pPrinters.push_back(std::unique_ptr<Printer>(new StreamPrinter(_stream)));
+                }
+
+                void attachDebugPrint() { printGroup.pPrinters.push_back(std::unique_ptr<Printer>(new DebugPrinter())); }
+
+                template<typename T>
+                PrintGroup& operator<<(T &x) {
+                    if (!bWritten) {
+                        printGroup << "\n";
+                        bWritten = true;
+                    }
+                    ///@todo write file and line
+                    printGroup << prefix;
+                    printGroup << x;
+                    return printGroup;
+                }
+            };
+
+            extern Logger Log;         ///<Log a normal info message.
+            extern Logger LogWarning;  ///<Log a warning.
+            extern Logger LogError;    ///<Log an error.
+            ///Log a debug message.
+            ///@attention This logger always exists (but might not be directed to any stream).
+            ///           To disable in debug builds, wrap inside I3DEBUG_ONLY() macro.
+            extern Logger LogDebug;
+        } //namespace logger
     } //namespace core
 } //namespace i3
 
