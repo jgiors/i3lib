@@ -21,7 +21,7 @@
 #define I3LOG_FILE_AND_LINE     i3::core::Logger::extractFilename(__FILE__) << "(" << I3STRINGIZE(__LINE__) << "): "
 
 ///Default informational log stream.
-#define i3log           i3::core::Logger::i3log_instance << I3LOG_FILE_AND_LINE " "
+#define i3log           i3::core::Logger::i3log_instance << I3LOG_FILE_AND_LINE
 ///Warning log stream.
 #define i3logWarning    i3::core::Logger::i3logWarning_instance << I3LOG_FILE_AND_LINE "WARNING! "
 ///Error log stream.
