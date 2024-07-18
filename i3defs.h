@@ -15,4 +15,9 @@
 #   define I3DEBUG_ONLY(...)
 #endif
 
+#define I3STRINGIZE(X)              _I3_STRINGIZE_PRIVATE(X)    ///<Stringize macro (will work with __LINE__).
+#define _I3_STRINGIZE_PRIVATE(X)    #X                          ///<Private for I3STRINGIZE() only.
+
+#define I3_LINE_NUMBER              I3STRINGIZE(__LINE__)       ///<Line number as literal string.
+
 #endif //I3DEFS_H

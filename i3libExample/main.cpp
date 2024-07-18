@@ -3,7 +3,7 @@
 #include <debugapi.h>
 #include <ostream>
 #include <fstream>
-#include "i3logger.h"
+#include "i3lib.h"
 
 #include <iostream>
 
@@ -13,8 +13,8 @@ namespace {
 
 int main()
 {   
-    i3log.attachDebugPrint();
-    i3log.attachStream(std::cerr);
-    i3log << "Hello World!\n";
+    i3::core::Logger::i3log_instance.enableDebugStream();
+    i3::core::Logger::i3log_instance.attachStream(std::cerr);
+    i3log << "Hello world!\n";
     return 0;
 }
