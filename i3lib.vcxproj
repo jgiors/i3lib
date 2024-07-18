@@ -121,7 +121,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="i3logger.cpp" />
-    <ClCompile Include="i3logger.h" />
+    <ClInclude Include="i3logger.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="i3defs.h" />
