@@ -9,7 +9,7 @@
 #include <tuple>
 #include <string>
 #include <sstream>
-#include "i3lib.h"
+#include "i3defs.h"
 
 ///@todo Make filename function which removes the path info (can it be done as a constexpr?).
 
@@ -17,7 +17,7 @@
 ///@note The __FILE__ part is not concatenated with line number as a size optimization.
 ///Letting __FILE__ stand alone means the linker can consoldiate all instance into one string.
 ///That would not be possible wiht line numbers appended to each instance.
-#define I3LOG_FILE_AND_LINE     __FILE__  << "(" I3STRINGIZE(__LINE__) "): "
+#define I3LOG_FILE_AND_LINE     __FILE__  << "(" << I3STRINGIZE(__LINE__) << "): "
 
 ///Default informational log stream.
 #define i3log           i3::core::Logger::i3log_instance << I3LOG_FILE_AND_LINE " "
@@ -54,7 +54,7 @@ namespace i3 {
                     }
 
                     for (auto &stream : streams)
-                        stream << t;
+                        *stream << t;
 
                     return *this;
                 }
