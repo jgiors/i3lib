@@ -8,6 +8,7 @@
 #include <vector>
 #include <tuple>
 #include <string>
+#include <cstring>
 #include <sstream>
 #include "i3defs.h"
 
@@ -17,7 +18,7 @@
 ///@note The __FILE__ part is not concatenated with line number as a size optimization.
 ///Letting __FILE__ stand alone means the linker can consoldiate all instance into one string.
 ///That would not be possible wiht line numbers appended to each instance.
-#define I3LOG_FILE_AND_LINE     __FILE__  << "(" << I3STRINGIZE(__LINE__) << "): "
+#define I3LOG_FILE_AND_LINE     i3::core::Logger::extractFilename(__FILE__) << "(" << I3STRINGIZE(__LINE__) << "): "
 
 ///Default informational log stream.
 #define i3log           i3::core::Logger::i3log_instance << I3LOG_FILE_AND_LINE " "
@@ -83,6 +84,12 @@ namespace i3 {
                 streamGroup << prefix;
                 streamGroup << t;
                 return streamGroup;
+            }
+
+            ///Extract filename from full path. Used to streamline logging.
+            static std::string extractFilename(const std::string filepath) {
+                size_t pos = filepath.find_last_of('\\');
+                return (pos == std::string::npos) ? filepath : filepath.substr(pos + 1);
             }
 
             static Logger i3log_instance;           ///<Log a normal info message, always defined.
