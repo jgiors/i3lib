@@ -9,8 +9,20 @@
 #include <tuple>
 #include <string>
 #include <sstream>
+#include "i3lib.h"
 
-///@todo complete documentation in this file
+#define i3log           i3::core::logger::log_always        ///<Default log stream.
+#define i3logWarning    i3::core::logger::logWarning_always ///<Warning log stream.
+#define i3logError      i3::core::logger::logError_always   ///<Error log stream.
+
+///Debug log stream. Compile out in debug (assuming compiler properly optimizes it out).
+#if DEBUG
+#   define i3logDebug   i3::core::logger::logDebug_always
+#else
+#   define i3logDebug   if (false) cerr
+#endif
+
+///@todo complete documentation in   this file
 
 namespace i3 {
     namespace core {
@@ -37,7 +49,7 @@ namespace i3 {
                 }
             };
 
-            ///Primary logger class. Use the global instances (below) for logging.
+            ///Primary logger class. Use global instances for logging.
             class Logger {
                 struct PrintGroup {
                     std::vector<std::unique_ptr<Printer>> pPrinters;

@@ -7,16 +7,14 @@
 
 #include <iostream>
 
-using i3::core::logger::Log;
-
 namespace {
 
 } //anonymous namespace
 
 int main()
 {   
-    Log.attachDebugPrint();
-    Log.attachStream(std::cerr);
-    Log << "Hello World!\n";
+    i3log.attachDebugPrint();
+    i3log.attachStream(std::cerr);
+    i3log << "Hello World!\n";
     return 0;
 }
