@@ -80,13 +80,13 @@ namespace i3 {
 
             ///@todo add macros to turn these on/off
 
-            extern Logger Log;         ///<Log a normal info message.
-            extern Logger LogWarning;  ///<Log a warning.
-            extern Logger LogError;    ///<Log an error.
-            ///Log a debug message.
+            extern Logger log_always;           ///<Log a normal info message, always defined.
+            extern Logger logWarning_always;    ///<Log a warning, always defined.
+            extern Logger logError_always;      ///<Log an error, always defined.
+            ///Log a debug message, always defined.
             ///@attention This logger always exists (but might not be directed to any stream).
             ///           To disable in debug builds, wrap inside I3DEBUG_ONLY() macro.
-            extern Logger LogDebug;
+            extern Logger logDebug_always;
         } //namespace logger
     } //namespace core
 } //namespace i3
