@@ -86,6 +86,7 @@ namespace i3 {
                 return streamGroup;
             }
 
+            ///@todo Convert extractFilename() to constexpr if possible.
             ///Extract filename from full path. Used to streamline logging.
             static std::string extractFilename(const std::string filepath) {
                 size_t pos = filepath.find_last_of('\\');
