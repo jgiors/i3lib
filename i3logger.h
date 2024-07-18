@@ -22,7 +22,7 @@
 #   define i3logDebug   if (false) cerr
 #endif
 
-///@todo complete documentation in   this file
+///@todo complete documentation in this file
 
 namespace i3 {
     namespace core {
