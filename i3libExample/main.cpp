@@ -27,7 +27,7 @@ namespace {
         Logger::i3logErr_instance.attachStream(cerr);
         Logger::i3logErr_instance.streamGroup << I3LOG_FILE_AND_LINE "Standard console cerr stream established.";
 
-        logFile.open(logFilename, std::ios_base::out | std::ios_base::ate);
+        logFile.open(logFilename, std::ios_base::out | std::ios_base::app);
         bool bLogFileIsEmpty = (std::filesystem::file_size(logFilename) == 0);
         if (bLogFileIsEmpty)
             logFile << I3LOG_FILE_AND_LINE "********** i3log.log **********";
