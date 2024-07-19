@@ -18,16 +18,21 @@
 ///That would not be possible with line numbers appended to each instance.
 #define I3LOG_FILE_AND_LINE     i3::core::Logger::extractFilename(__FILE__) << "(" << I3STRINGIZE(__LINE__) << "): "
 
+#define I3LOG_PREFIX            I3LOG_FILE_AND_LINE
+#define I3LOG_WARNING_PREFIX    I3LOG_FILE_AND_LINE "WARNING! "
+#define I3LOG_ERROR_PREFIX      I3LOG_FILE_AND_LINE "!!! ERROR !!! "
+#define I3LOG_DEBUG_PREFIX      I3LOG_FILE_AND_LINE "[DEBUG] "
+
 ///Default informational log stream.
-#define i3log           i3::core::Logger::i3log_instance << I3LOG_FILE_AND_LINE
+#define i3log           i3::core::Logger::i3log_instance << I3LOG_PREFIX
 ///Warning log stream.
-#define i3logWarning    i3::core::Logger::i3logWarning_instance << I3LOG_FILE_AND_LINE "WARNING! "
+#define i3logWarn       i3::core::Logger::i3logWarn_instance << I3LOG_WARNING_PREFIX
 ///Error log stream.
-#define i3logError      i3::core::Logger::i3logError_instance << I3LOG_FILE_AND_LINE "!!! ERROR !!! "
+#define i3logErr        i3::core::Logger::i3logErr_instance <<  I3LOG_ERROR_PREFIX
 
 ///Debug log stream. Compile out in debug (assuming compiler properly optimizes it out).
 #if DEBUG
-#   define i3logDebug   i3::core::Logger::i3logDebug_instance << I3LOG_FILE_AND_LINE "[DEBUG] "
+#   define i3logDebug   i3::core::Logger::i3logDebug_instance << I3LOG_DEBUG_PREFIX
 #else
 #   define i3logDebug   if (false) cerr
 #endif
@@ -72,15 +77,7 @@ namespace i3 {
             ///Stream write. Except for the first write, prepends a newline bacause there is no
             ///way to postpend a newline.
             template<typename T>
-            StreamGroup& operator<<(const T &t) {
-                if (bFirstWrite)
-                    bFirstWrite = false;
-                else
-                    streamGroup << "\n";
-
-                streamGroup << t;
-                return streamGroup;
-            }
+            StreamGroup& operator<<(const T &t) { return streamGroup << "\n" << t; }
 
             ///Extract filename from full path. Used to streamline logging.
             static constexpr std::string extractFilename(const std::string filepath) {
@@ -89,8 +86,8 @@ namespace i3 {
             }
 
             static Logger i3log_instance;           ///<Log a normal info message, always defined.
-            static Logger i3logWarning_instance;    ///<Log a warning, always defined.
-            static Logger i3logError_instance;      ///<Log an error, always defined.
+            static Logger i3logWarn_instance;    ///<Log a warning, always defined.
+            static Logger i3logErr_instance;      ///<Log an error, always defined.
             ///Log a debug message, always defined.
             ///@attention This logger always exists (but might not be directed to any stream).
             ///           To disable in debug builds, wrap inside I3DEBUG_ONLY() macro.
