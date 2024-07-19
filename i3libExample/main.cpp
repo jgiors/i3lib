@@ -11,11 +11,6 @@
 using std::cerr;
 using i3::core::Logger;
 
-static constexpr auto i3logAppendingNotice =    "\n\n"
-R"(******************************************)" "\n"
-R"(* Appending output to existing i3log.log *)" "\n"
-R"(******************************************)" "\n";
-
 namespace {
     constexpr auto logFilename = "i3log.log";
 
@@ -30,9 +25,20 @@ namespace {
         logFile.open(logFilename, std::ios_base::out | std::ios_base::app);
         bool bLogFileIsEmpty = (std::filesystem::file_size(logFilename) == 0);
         if (bLogFileIsEmpty)
-            logFile << I3LOG_FILE_AND_LINE "********** i3log.log **********";
+        {
+            logFile << I3LOG_FILE_AND_LINE << "*************\n";
+            logFile << I3LOG_FILE_AND_LINE << "* i3log.log *\n";
+            logFile << I3LOG_FILE_AND_LINE << "*************\n";
+        }
         else
-            logFile << I3LOG_FILE_AND_LINE << i3logAppendingNotice;
+        {
+            logFile << "\n" << I3LOG_FILE_AND_LINE << "\n";
+            logFile << I3LOG_FILE_AND_LINE << "******************************************\n";
+            logFile << I3LOG_FILE_AND_LINE << "* Appending output to existing i3log.log *\n";
+            logFile << I3LOG_FILE_AND_LINE << "******************************************\n";
+        }
+
+        logFile << I3LOG_FILE_AND_LINE;
 
         Logger::i3logErr_instance.attachStream(logFile);
 
