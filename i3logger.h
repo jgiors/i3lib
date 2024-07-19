@@ -12,12 +12,10 @@
 #include <sstream>
 #include "i3defs.h"
 
-///@todo Make filename function which removes the path info (can it be done as a constexpr?).
-
 ///Filename and line number format.
 ///@note The __FILE__ part is not concatenated with line number as a size optimization.
 ///Letting __FILE__ stand alone means the linker can consoldiate all instance into one string.
-///That would not be possible wiht line numbers appended to each instance.
+///That would not be possible with line numbers appended to each instance.
 #define I3LOG_FILE_AND_LINE     i3::core::Logger::extractFilename(__FILE__) << "(" << I3STRINGIZE(__LINE__) << "): "
 
 ///Default informational log stream.
@@ -36,15 +34,15 @@
 
 namespace i3 {
     namespace core {
-        ///Primary logger class. Use global instances for logging.
+        ///Primary logger class. Use macros writing to the global instances.
         class Logger {
             ///Group of streams. Streaming to this object forwards to each referenced stream.
             ///Also supports debug output stream (on Windows, this is routed to the debug window).
             struct StreamGroup {
-                std::vector<std::ostream*> streams;
-                bool bDebugStreamEnabled{false};
+                std::vector<std::ostream*> streams; ///<Attached output streams.
+                bool bDebugStreamEnabled{false};    ///<Write to debug output?
             
-                ///Write stream. Forwards to each referenced stream, and optionally debug output.
+                ///Stream Write. Forwards to each referenced stream, and optionally debug output.
                 template<typename T>
                 StreamGroup& operator<<(const T &t) {
                     if (bDebugStreamEnabled)
@@ -62,17 +60,17 @@ namespace i3 {
             };
 
             StreamGroup streamGroup;    ///<Group of streams (and debug out) attached to this log.
-            std::string prefix;         ///<Prefix for each log message. Usually the log level.
             bool bFirstWrite{true};     ///<Has log been written yet? If not, don't prepend EOL.
 
         public:
-            void attachStream(std::ostream &_stream) {
+            void attachStream(std::ostream &_stream) {  ///<Attach an output stream.
                 streamGroup.streams.push_back(&_stream);
             }
 
             void enableDebugStream(bool b = true) { streamGroup.bDebugStreamEnabled = b; }
 
-            ///Write stream.
+            ///Stream write. Except for the first write, prepends a newline bacause there is no
+            ///way to postpend a newline.
             template<typename T>
             StreamGroup& operator<<(const T &t) {
                 if (bFirstWrite)
@@ -80,8 +78,6 @@ namespace i3 {
                 else
                     streamGroup << "\n";
 
-                ///@todo write file and line (but how, it would always report this line! Do we need to use macros?)
-                streamGroup << prefix;
                 streamGroup << t;
                 return streamGroup;
             }
