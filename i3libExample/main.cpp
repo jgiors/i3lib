@@ -11,45 +11,56 @@
 using std::cerr;
 using i3::core::Logger;
 
+static constexpr auto i3logAppendingNotice =    "\n\n"
+R"(******************************************)" "\n"
+R"(* Appending output to existing i3log.log *)" "\n"
+R"(******************************************)" "\n";
+
 namespace {
     constexpr auto logFilename = "i3log.log";
+
+    void initLogger(std::ofstream &logFile)
+    {
+        Logger::i3logErr_instance.enableDebugStream();
+        Logger::i3logErr_instance.streamGroup << I3LOG_FILE_AND_LINE "Debug output log stream established.\n";
+
+        Logger::i3logErr_instance.attachStream(cerr);
+        Logger::i3logErr_instance.streamGroup << I3LOG_FILE_AND_LINE "Standard console cerr stream established.";
+
+        logFile.open(logFilename, std::ios_base::out | std::ios_base::ate);
+        bool bLogFileIsEmpty = (std::filesystem::file_size(logFilename) == 0);
+        if (bLogFileIsEmpty)
+            logFile << I3LOG_FILE_AND_LINE "********** i3log.log **********";
+        else
+            logFile << I3LOG_FILE_AND_LINE << i3logAppendingNotice;
+
+        Logger::i3logErr_instance.attachStream(logFile);
+
+        Logger::i3logErr_instance << I3LOG_FILE_AND_LINE "Error logging established.";
+
+        Logger::i3logWarn_instance.enableDebugStream();
+        Logger::i3logWarn_instance.attachStream(cerr);
+        Logger::i3logWarn_instance.attachStream(logFile);
+
+        Logger::i3logWarn_instance << I3LOG_FILE_AND_LINE "Warning logging established.";
+
+        Logger::i3log_instance.enableDebugStream();
+        Logger::i3log_instance.attachStream(cerr);
+        Logger::i3log_instance.attachStream(logFile);
+
+        i3log << "Default logging established.";
+        
+        Logger::i3logDebug_instance.enableDebugStream();
+        Logger::i3logDebug_instance.attachStream(cerr);
+        Logger::i3logDebug_instance.attachStream(logFile);
+
+        i3logDebug << "Debug logging established.";
+    }
 } //anonymous namespace
 
 int main()
 {
-    Logger::i3logErr_instance.enableDebugStream();
-    Logger::i3logErr_instance.attachStream(cerr);
-
-    OutputDebugStringA("****************************** i3log debug output stream ******************************");
-    cerr << "****************************** i3log console stream ******************************";
-
-    bool bNewFile = !std::filesystem::exists(logFilename);
-    std::ofstream logFile(logFilename, std::ios_base::ate);
-    if (!bNewFile)
-        logFile << "\n\n";
-    logFile << "******************** i3log.log: Beginning new execution log. ********************";
-
-    Logger::i3logErr_instance.attachStream(logFile);
-
-    i3logErr << "NOT ACTUALLY AN ERRROR: Error logging is set up.";
-
-    Logger::i3logWarn_instance.enableDebugStream();
-    Logger::i3logWarn_instance.attachStream(cerr);
-    Logger::i3logWarn_instance.attachStream(logFile);
-
-    i3logWarn << "NOT ACTUALLY A WARNING: Warning logging is set up.";
-
-    Logger::i3log_instance.enableDebugStream();
-    Logger::i3log_instance.attachStream(cerr);
-    Logger::i3log_instance.attachStream(logFile);
-
-    i3log << "Normal level logging is set up.";
-    
-    Logger::i3logDebug_instance.enableDebugStream();
-    Logger::i3logDebug_instance.attachStream(cerr);
-    Logger::i3logDebug_instance.attachStream(logFile);
-
-    i3logDebug << "Debug logging is set up.";
-
+    std::ofstream logFile;
+    initLogger(logFile);    
     return 0;
 }

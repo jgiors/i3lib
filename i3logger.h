@@ -40,7 +40,7 @@
 namespace i3 {
     namespace core {
         ///Primary logger class. Use macros writing to the global instances.
-        class Logger {
+        struct Logger {
             ///Group of streams. Streaming to this object forwards to each referenced stream.
             ///Also supports debug output stream (on Windows, this is routed to the debug window).
             struct StreamGroup {
@@ -65,9 +65,7 @@ namespace i3 {
             };
 
             StreamGroup streamGroup;    ///<Group of streams (and debug out) attached to this log.
-            bool bFirstWrite{true};     ///<Has log been written yet? If not, don't prepend EOL.
 
-        public:
             void attachStream(std::ostream &_stream) {  ///<Attach an output stream.
                 streamGroup.streams.push_back(&_stream);
             }
