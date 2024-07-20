@@ -20,4 +20,7 @@
 
 #define I3_LINE_NUMBER              I3STRINGIZE(__LINE__)       ///<Line number as literal string.
 
+///Standard banner with build date/time for command-line app or unit test.
+#define LIB_BANNER(APP_NAME)   APP_NAME " ~ built " __DATE__ " " __TIME__
+
 #endif //I3DEFS_H
