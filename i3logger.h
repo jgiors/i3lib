@@ -31,7 +31,7 @@
 #define i3logErr        i3::core::Logger::i3logErr_instance <<  I3LOG_ERROR_PREFIX " "
 
 ///Debug log stream. Compile out in debug (assuming compiler properly optimizes it out).
-#if DEBUG
+#if I3DEBUG
 #   define i3logDebug   i3::core::Logger::i3logDebug_instance << I3LOG_DEBUG_PREFIX " "
 #else
 #   define i3logDebug   if (false) cerr
