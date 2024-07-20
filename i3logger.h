@@ -24,7 +24,7 @@
 #define I3LOG_DEBUG_PREFIX      I3LOG_FILE_AND_LINE "[DEBUG]"
 
 ///Default informational log stream.
-#define i3log           i3::core::Logger::i3log_instance << I3LOG_PREFIX " "
+#define i3log           i3::core::Logger::i3log_instance << I3LOG_PREFIX
 ///Warning log stream.
 #define i3logWarn       i3::core::Logger::i3logWarn_instance << I3LOG_WARNING_PREFIX " "
 ///Error log stream.
@@ -70,6 +70,7 @@ namespace i3 {
                 streamGroup.streams.push_back(&_stream);
             }
 
+            ///Enable or disable the debug stream.
             void enableDebugStream(bool b = true) { streamGroup.bDebugStreamEnabled = b; }
 
             ///Stream write. Except for the first write, prepends a newline bacause there is no
