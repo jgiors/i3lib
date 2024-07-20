@@ -19,20 +19,20 @@
 #define I3LOG_FILE_AND_LINE     i3::core::Logger::extractFilename(__FILE__) << "(" << I3STRINGIZE(__LINE__) << "): "
 
 #define I3LOG_PREFIX            I3LOG_FILE_AND_LINE
-#define I3LOG_WARNING_PREFIX    I3LOG_FILE_AND_LINE "WARNING! "
-#define I3LOG_ERROR_PREFIX      I3LOG_FILE_AND_LINE "!!! ERROR !!! "
-#define I3LOG_DEBUG_PREFIX      I3LOG_FILE_AND_LINE "[DEBUG] "
+#define I3LOG_WARNING_PREFIX    I3LOG_FILE_AND_LINE "WARNING!"
+#define I3LOG_ERROR_PREFIX      I3LOG_FILE_AND_LINE "!!! ERROR !!!"
+#define I3LOG_DEBUG_PREFIX      I3LOG_FILE_AND_LINE "[DEBUG]"
 
 ///Default informational log stream.
-#define i3log           i3::core::Logger::i3log_instance << I3LOG_PREFIX
+#define i3log           i3::core::Logger::i3log_instance << I3LOG_PREFIX " "
 ///Warning log stream.
-#define i3logWarn       i3::core::Logger::i3logWarn_instance << I3LOG_WARNING_PREFIX
+#define i3logWarn       i3::core::Logger::i3logWarn_instance << I3LOG_WARNING_PREFIX " "
 ///Error log stream.
-#define i3logErr        i3::core::Logger::i3logErr_instance <<  I3LOG_ERROR_PREFIX
+#define i3logErr        i3::core::Logger::i3logErr_instance <<  I3LOG_ERROR_PREFIX " "
 
 ///Debug log stream. Compile out in debug (assuming compiler properly optimizes it out).
 #if DEBUG
-#   define i3logDebug   i3::core::Logger::i3logDebug_instance << I3LOG_DEBUG_PREFIX
+#   define i3logDebug   i3::core::Logger::i3logDebug_instance << I3LOG_DEBUG_PREFIX " "
 #else
 #   define i3logDebug   if (false) cerr
 #endif
