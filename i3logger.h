@@ -41,49 +41,35 @@ namespace i3 {
     namespace core {
         ///Primary logger class. Use macros writing to the global instances.
         struct Logger {
-            ///Group of streams. Streaming to this object forwards to each referenced stream.
-            ///Also supports debug output stream (on Windows, this is routed to the debug window).
-            struct StreamGroup {
-                std::vector<std::ostream*> streams; ///<Attached output streams.
-                bool bDebugStreamEnabled{false};    ///<Write to debug output?
-            
-                ///Stream Write. Forwards to each referenced stream, and optionally debug output.
-                template<typename T>
-                StreamGroup& operator<<(const T &t) {
-                    if (bDebugStreamEnabled)
-                    {
-                        std::ostringstream oss;
-                        oss << t;
-                        OutputDebugStringA(oss.str().c_str());
-                    }
-
-                    for (auto &stream : streams)
-                        *stream << t;
-
-                    return *this;
-                }
-            };
-
-            StreamGroup streamGroup;    ///<Group of streams (and debug out) attached to this log.
-
             void attachStream(std::ostream &_stream) {  ///<Attach an output stream.
-                streamGroup.streams.push_back(&_stream);
+                streams.push_back(&_stream);
             }
 
-            ///Enable or disable the debug stream.
-            void enableDebugStream(bool b = true) { streamGroup.bDebugStreamEnabled = b; }
-
-            ///Stream write. Except for the first write, prepends a newline bacause there is no
-            ///way to postpend a newline.
+            ///Stream Write. Forwards to each referenced stream, and optionally debug output.
             template<typename T>
-            StreamGroup& operator<<(const T &t) { return streamGroup << "\n" << t; }
+            Logger& operator<<(const T &t) {
+                if (bDebugStreamEnabled)
+                {
+                    std::ostringstream oss;
+                    oss << t;
+                    OutputDebugStringA(oss.str().c_str());
+                }
 
-            ///Extract filename from full path. Used to streamline logging.
+                for (auto &stream : streams)
+                    *stream << t;
+
+                return *this;
+            }
+
+            ///Extract filename from full path. Used to streamline logged filenames.
             static constexpr std::string extractFilename(const std::string filepath) {
                 size_t pos = filepath.find_last_of('\\');
                 return (pos == std::string::npos) ? filepath : filepath.substr(pos + 1);
             }
 
+            std::vector<std::ostream*> streams; ///<Attached output streams.
+            bool bDebugStreamEnabled{false};    ///<Write to debug output?
+        
             static Logger i3log_instance;           ///<Log a normal info message, always defined.
             static Logger i3logWarn_instance;    ///<Log a warning, always defined.
             static Logger i3logErr_instance;      ///<Log an error, always defined.

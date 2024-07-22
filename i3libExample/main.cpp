@@ -16,11 +16,11 @@ namespace {
 
     void initLogger(std::ofstream &logFile)
     {
-        Logger::i3logErr_instance.enableDebugStream();
-        Logger::i3logErr_instance.streamGroup << I3LOG_FILE_AND_LINE "Debug output log stream established.\n";
+        Logger::i3logErr_instance.bDebugStreamEnabled = true;
+        Logger::i3logErr_instance << I3LOG_FILE_AND_LINE "Debug output log stream established.\n";
 
         Logger::i3logErr_instance.attachStream(cerr);
-        Logger::i3logErr_instance.streamGroup << I3LOG_FILE_AND_LINE "Standard console cerr stream established.";
+        Logger::i3logErr_instance << I3LOG_FILE_AND_LINE "Standard console cerr stream established.\n";
 
         logFile.open(logFilename, std::ios_base::out | std::ios_base::app);
         bool bLogFileIsEmpty = (std::filesystem::file_size(logFilename) == 0);
@@ -29,38 +29,40 @@ namespace {
             logFile << I3LOG_FILE_AND_LINE << "*************\n";
             logFile << I3LOG_FILE_AND_LINE << "* i3log.log *\n";
             logFile << I3LOG_FILE_AND_LINE << "*************\n";
+            logFile << I3LOG_FILE_AND_LINE << "\n";
         }
         else
         {
-            logFile << "\n" << I3LOG_FILE_AND_LINE << "\n";
+            logFile << I3LOG_FILE_AND_LINE << "\n";
             logFile << I3LOG_FILE_AND_LINE << "******************************************\n";
             logFile << I3LOG_FILE_AND_LINE << "* Appending output to existing i3log.log *\n";
             logFile << I3LOG_FILE_AND_LINE << "******************************************\n";
+            logFile << I3LOG_FILE_AND_LINE << "\n";
         }
 
         logFile << I3LOG_FILE_AND_LINE;
 
         Logger::i3logErr_instance.attachStream(logFile);
 
-        Logger::i3logErr_instance << I3LOG_FILE_AND_LINE "Error logging established.";
+        Logger::i3logErr_instance << I3LOG_FILE_AND_LINE "Error logging established.\n";
 
-        Logger::i3logWarn_instance.enableDebugStream();
+        Logger::i3logWarn_instance.bDebugStreamEnabled = true;
         Logger::i3logWarn_instance.attachStream(cerr);
         Logger::i3logWarn_instance.attachStream(logFile);
 
-        Logger::i3logWarn_instance << I3LOG_FILE_AND_LINE "Warning logging established.";
+        Logger::i3logWarn_instance << I3LOG_FILE_AND_LINE "Warning logging established.\n";
 
-        Logger::i3log_instance.enableDebugStream();
+        Logger::i3log_instance.bDebugStreamEnabled = true;
         Logger::i3log_instance.attachStream(cerr);
         Logger::i3log_instance.attachStream(logFile);
 
-        i3log << "Default logging established.";
+        i3log << "Default logging established.\n";
         
-        Logger::i3logDebug_instance.enableDebugStream();
+        Logger::i3logDebug_instance.bDebugStreamEnabled = true;
         Logger::i3logDebug_instance.attachStream(cerr);
         Logger::i3logDebug_instance.attachStream(logFile);
 
-        i3logDebug << "Debug logging established.";
+        i3logDebug << "Debug logging established.\n";
     }
 } //anonymous namespace
 
