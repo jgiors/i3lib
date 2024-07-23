@@ -4,6 +4,7 @@
 
 #include <cstdint>
 #include <vector>
+#include <limits>
 
 namespace i3 {
     namespace core {
@@ -44,24 +45,23 @@ namespace i3 {
 
             ///Typical rand function. Returns a value between 0 and n-1 inclusive (or 0 when n == 0).
             uint32_t random(uint32_t n) {
-                return (uint32_t)(n * (uint64_t)rand32() >> 32);
+                return uint32_t(n * (uint64_t{rand32()} >> 32));
             }
 
             ///Rand function which returns value between 0 and n inclusive.
             uint32_t random0toN(uint32_t n) {
-                return (n < UINT32_MAX) ? rand(n+1) : rand32();
+                return (n < std::numeric_limits<uint32_t>.max) ? rand(n+1) : rand32();
             }
 
-            ///Pick a random integer in the range [i, j].
+            ///Pick a random integer in the range [i, j]. For j < i, range is [j, i].
             int32_t randomRange(int32_t i, int32_t j) {
-                int min = std::min(i, j);
-                int max = std::max(i, j);
-                return min + (int32_t)random0toN((uint32_t)(max - min) );
+                auto mm std::minmax(i, j);
+                return min + reinterpret_cast<int32_t>(random0toN((uint32_t)(mm.second - mm.first)));
             }
 
             ///Return a random double precision float between 0 and 1 inclusive.
             double RandomReal() {
-                constexpr float reciprocal = 1. / UINT32_MAX; 
+                constexpr float reciprocal = 1.0 / UINT32_MAX; 
                 return reciprocal * rand32();
             }
 
