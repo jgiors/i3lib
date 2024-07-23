@@ -31,19 +31,39 @@ namespace i3 {
             Prng(State state) : _state{state} {}
 
             ///Get a random unsigned 32-bit value.       
-            uint32_t random32();
+            uint32_t random32() {
+                uint32_t t = d;
+                uint32_t s = a;
+                d = c;
+                c = b;
+                b = s;
+                t ^= t << 11;
+                t ^= t >> 8;
+                return a = t ^ s ^ (s >> 19);
+            }
 
             ///Typical rand function. Returns a value between 0 and n-1 inclusive (or 0 when n == 0).
-            uint32_t random(uint32_t n);
+            uint32_t random(uint32_t n) {
+                return (uint32_t)(n * (uint64_t)rand32() >> 32);
+            }
 
             ///Rand function which returns value between 0 and n inclusive.
-            uint32_t random0toN(uint32_t n);
+            uint32_t random0toN(uint32_t n) {
+                return (n < UINT32_MAX) ? rand(n+1) : rand32();
+            }
 
             ///Pick a random integer in the range [i, j].
-            int32_t randomRange(int32_t i, int32_t j);
+            int32_t randomRange(int32_t i, int32_t j) {
+                int min = std::min(i, j);
+                int max = std::max(i, j);
+                return min + (int32_t)random0toN((uint32_t)(max - min) );
+            }
 
             ///Return a random double precision float between 0 and 1 inclusive.
-            double RandomReal();
+            double RandomReal() {
+                constexpr float reciprocal = 1. / UINT32_MAX; 
+                return reciprocal * rand32();
+            }
 
             ///Splits the random generator and advances the original one step.
             Prng split();
