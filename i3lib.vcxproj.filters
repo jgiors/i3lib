@@ -29,5 +29,8 @@
     <ClInclude Include="i3logger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="i3prng.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
