@@ -5,6 +5,7 @@
 #include <cstdint>
 #include <vector>
 #include <limits>
+#include <type_traits>
 
 namespace i3 {
     namespace core {
@@ -28,15 +29,29 @@ namespace i3 {
             ///Create a Prng, using the hash of a seed buffer to initialize.
             Prng(const std::vector<byte> &seed);
 
-            ///Create an independent Prng by hashing the concatenation of the current Prng state
-            ///onto a user-supplied parameterBuffer.
-            ///@note This is also known as "splitting" a PRNG.
+            ///Create a unique, independent Prng by applying a parameterization to a source Prng
+            ///(also known as a parameterized "split").
             ///@param prng              The source prng to split from. State is not mutated.
-            ///@param parameterBuffer   Data buffer to include in the hash for the split Prng state.
-            ///                         Do not pass a large buffer -- it is pass-by-value copied.
-            Prng(const Prng &prng, std::vector<byte> parameterBuffer);
+            ///@param parameterBuffer   Data buffer for Prng parameterization. This value is
+            ///                         combined with the source Prng._state using a hash function.
+            Prng(const Prng &prng, std::vector<byte> &parameterBuffer);
 
-            ///Create a Prng with a given state.
+            ///Create a unique, independent Prng by applying a parameterization to a source Prng
+            ///(also known as a parameterized "split").
+            ///@param prng      The source prng to split from. State is not mutated.
+            ///@param parameter Prng parameterization value. Combined with the source Prng._state
+            ///                 using a hash function, so it must be a trivial plain-data type
+            ///                 and should not contain pointers or references.
+            template<T>
+            Prng(const Prng &prng, T parameter) {
+                static_assert(std::is_trivial<parameter>);
+                std::vector<byte> buffer;
+                byte *p = reinterpret_cast<byte*>(&parameter);
+                buffer.insert(0, p, p + sizeof(parameter));
+                return Prng(prng, buffer);)
+            }
+
+            ///Create a Prng with a given state, e.g. as obtained from the state() function.
             Prng(State state) : _state{state} {}
 
             ///Get a random unsigned 32-bit value.       
@@ -69,7 +84,7 @@ namespace i3 {
             }
 
             ///Return a random double precision float between 0 and 1 inclusive.
-            double RandomReal() {
+            double randomReal() {
                 constexpr float reciprocal = 1.0 / UINT32_MAX; 
                 return reciprocal * rand32();
             }
