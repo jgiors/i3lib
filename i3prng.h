@@ -26,7 +26,7 @@ namespace i3 {
             Prng() = delete;
 
             ///Create a Prng, using the hash of a seed buffer to initialize.
-            Prng(const std::vector<uint8_t> &seed);
+            Prng(const std::vector<byte> &seed);
 
             ///Create a Prng with the provided state.
             Prng(State state) : _state{state} {}
@@ -76,7 +76,7 @@ namespace i3 {
             ///Split the random generator, including the hash of the supplied parameters buffer
             ///in the splitting process.
             ///@note Do not use a long parameters buffer. It is copied within this function.
-            Prgn split_parameterized(const std::vector<uint8_t> &parameters) const;
+            Prgn split_parameterized(const std::vector<byte> &parameters) const;
 
             ///Get the internal state.
             State state() const { return _state; }
