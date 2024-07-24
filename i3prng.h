@@ -28,7 +28,15 @@ namespace i3 {
             ///Create a Prng, using the hash of a seed buffer to initialize.
             Prng(const std::vector<byte> &seed);
 
-            ///Create a Prng with the provided state.
+            ///Create an independent Prng by hashing the concatenation of the current Prng state
+            ///onto a user-supplied parameterBuffer.
+            ///@note This is also known as "splitting" a PRNG.
+            ///@param prng              The source prng to split from. State is not mutated.
+            ///@param parameterBuffer   Data buffer to include in the hash for the split Prng state.
+            ///                         Do not pass a large buffer -- it is pass-by-value copied.
+            Prng(const Prng &prng, std::vector<byte> parameterBuffer);
+
+            ///Create a Prng with a given state.
             Prng(State state) : _state{state} {}
 
             ///Get a random unsigned 32-bit value.       
@@ -43,9 +51,9 @@ namespace i3 {
                 return a = t ^ s ^ (s >> 19);
             }
 
-            ///Typical rand function. Returns a value between 0 and n-1 inclusive (or 0 when n == 0).
+            ///Typical rand function. Returns value in the range [0, n-1] (or 0 when n == 0).
             uint32_t random(uint32_t n) {
-                return uint32_t(n * (uint64_t{rand32()} >> 32));
+                return uint32_t((n * uint64_t{rand32()}) >> 32);
             }
 
             ///Rand function which returns value between 0 and n inclusive.
@@ -56,7 +64,8 @@ namespace i3 {
             ///Pick a random integer in the range [i, j]. For j < i, range is [j, i].
             int32_t randomRange(int32_t i, int32_t j) {
                 auto mm std::minmax(i, j);
-                return min + reinterpret_cast<int32_t>(random0toN((uint32_t)(mm.second - mm.first)));
+                uint32_t unsignedDiff = reinterpret_cast<uint32_t>(mm.second - mm.first);
+                return mm.first + reinterpret_cast<int32_t>(random0toN(unsignedDiff));
             }
 
             ///Return a random double precision float between 0 and 1 inclusive.
@@ -64,19 +73,6 @@ namespace i3 {
                 constexpr float reciprocal = 1.0 / UINT32_MAX; 
                 return reciprocal * rand32();
             }
-
-            ///Splits the random generator and advances the original one step.
-            Prng split();
-
-            ///Splits the random generator, but does not advance the state of the original generator.
-            ///@important   Do not split the same generator twice without advancing it,
-            ///             otherwise the new generators will be identical and correlated.
-            Prng split_noMutate() const;
-
-            ///Split the random generator, including the hash of the supplied parameters buffer
-            ///in the splitting process.
-            ///@note Do not use a long parameters buffer. It is copied within this function.
-            Prgn split_parameterized(const std::vector<byte> &parameters) const;
 
             ///Get the internal state.
             State state() const { return _state; }
