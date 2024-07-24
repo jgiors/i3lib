@@ -5,8 +5,9 @@
 
 Prng(const Prng &prng, std::vector<byte> &parameterBuffer) {
     XXH3_state_t hasher;
+    static_assert(sizeof(hasher) == sizeof(_state));
 
-    ///@todo Some kind of release_assert() or whatnot instead of exceptions (these are hard stop errors).
+    ///@todo Some kind of release_assert() or whatnot instead of exceptions (I believe these are hard stop errors).
 
     if (XXH3_128bits_reset(&hasher) != XXH_OK)
         throw std::runtime_exception("XXH3_128bits_reset");
