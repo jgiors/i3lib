@@ -17,7 +17,16 @@ inline i3abort() do { i3break(); std::abort(); }
 ///@example I3ABORT(i3logError << "It's the end of the world!\n");
 inline i3abort(i3::core::Logger &streamingLogMessage) { i3abort(); }
 
-///Check macro which asserts a condition in all builds. On failure, I3ABORT().
+///Check macro which asserts a condition in all builds. On failure, i3abort().
 #define I3CHECK(C) if (!(C)) i3abort(i3logError << "I3CHECK(" << #C << ") failed!\n")
+
+///Check macro which asserts a condition in all builds.
+///On failure, print streaming log message and i3abort().
+#define I3CHECK(CONDITION, STREAMING_LOG_MESSAGE) do { \
+            if (!CONDITION) { \
+                i3logError << "I3CHECK(" << #CONDITION << ") failed: "; \
+                i3abort(STREAMING_LOG_MESSAGE); \
+            } \
+        } while(false)
 
 #endif //I3ERROR_H
