@@ -15,12 +15,6 @@
 #   define I3DEBUG_ONLY(...)
 #endif
 
-#if I3DEBUG
-#   define I3DEBUG_BREAK()    __debugbreak()
-#else
-#   define I3DEBUG_BREAK()
-#endif
-
 #define I3STRINGIZE(X)              _I3_STRINGIZE_PRIVATE(X)    ///<Stringize macro (will work with __LINE__).
 #define _I3_STRINGIZE_PRIVATE(X)    #X                          ///<Private for I3STRINGIZE() only.
 
