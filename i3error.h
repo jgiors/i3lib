@@ -22,6 +22,7 @@ inline i3abort(i3::core::Logger &streamingLogMessage) { i3abort(); }
 
 ///Check macro which asserts a condition in all builds.
 ///On failure, print streaming log message and i3abort().
+///@example I3CHECK(x == 0, i3logError << "Why is x = " << x << "?\n");
 #define I3CHECK(CONDITION, STREAMING_LOG_MESSAGE) do { \
             if (!CONDITION) { \
                 i3logError << "I3CHECK(" << #CONDITION << ") failed: "; \
