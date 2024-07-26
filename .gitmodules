@@ -1,3 +1,6 @@
 [submodule "xxHash"]
 	path = xxHash
 	url = https://github.com/Cyan4973/xxHash.git
+[submodule "libSDL2pp"]
+	path = libSDL2pp
+	url = https://github.com/libSDL2pp/libSDL2pp.git
