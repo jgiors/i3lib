@@ -9,7 +9,7 @@
 #include <iostream>
 
 using std::cerr;
-using i3::core::Logger;
+using i3::Logger;
 
 namespace {
     constexpr auto logFilename = "i3log.log";

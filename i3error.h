@@ -15,7 +15,7 @@ inline void i3break() { I3DEBUG_ONLY(__debugbreak()); }
 ///Abort with streaming log message.
 ///Logs the message, breaks into the code (in debug builds), then exits the program.
 ///@example I3ABORT(i3logErr << "It's the end of the world!\n");
-[[noreturn]] inline void i3abort(i3::core::Logger &streamingLogMessage) { i3abort(); }
+[[noreturn]] inline void i3abort(i3::Logger &streamingLogMessage) { i3abort(); }
 
 ///Check macro which asserts a condition in all builds. On failure, i3abort().
 #define I3CHECK(C) if (!(C)) i3abort(i3logErr << "I3CHECK(" << #C << ") failed!\n")

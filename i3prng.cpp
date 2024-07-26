@@ -5,7 +5,7 @@
 #include "xxh3.h"
 #include <exception>
 
-i3::core::Prng::Prng(const i3::core::Prng &prng, std::vector<std::byte> &parameterBuffer) {
+i3::Prng::Prng(const i3::Prng &prng, std::vector<std::byte> &parameterBuffer) {
     XXH3_state_t hasher;
 
     I3CHECK(XXH3_128bits_reset(&hasher) == XXH_OK);
