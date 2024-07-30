@@ -5,16 +5,6 @@ VisualStudioVersion = 17.7.34024.191
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "i3lib", "i3lib.vcxproj", "{0D09C34C-8139-463D-98BD-625C5F7D00BD}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "i3libExample", "i3libExample\i3libExample.vcxproj", "{B8250D04-45C1-4A23-AD16-6A5C8D6EDB24}"
-	ProjectSection(ProjectDependencies) = postProject
-		{0D09C34C-8139-463D-98BD-625C5F7D00BD} = {0D09C34C-8139-463D-98BD-625C5F7D00BD}
-	EndProjectSection
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fsmlExample", "fsmlExample\fsmlExample.vcxproj", "{1461B2A3-D313-4A26-B920-27154B3AC21B}"
-	ProjectSection(ProjectDependencies) = postProject
-		{0D09C34C-8139-463D-98BD-625C5F7D00BD} = {0D09C34C-8139-463D-98BD-625C5F7D00BD}
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -31,22 +21,6 @@ Global
 		{0D09C34C-8139-463D-98BD-625C5F7D00BD}.Release|x64.Build.0 = Release|x64
 		{0D09C34C-8139-463D-98BD-625C5F7D00BD}.Release|x86.ActiveCfg = Release|Win32
 		{0D09C34C-8139-463D-98BD-625C5F7D00BD}.Release|x86.Build.0 = Release|Win32
-		{B8250D04-45C1-4A23-AD16-6A5C8D6EDB24}.Debug|x64.ActiveCfg = Debug|x64
-		{B8250D04-45C1-4A23-AD16-6A5C8D6EDB24}.Debug|x64.Build.0 = Debug|x64
-		{B8250D04-45C1-4A23-AD16-6A5C8D6EDB24}.Debug|x86.ActiveCfg = Debug|Win32
-		{B8250D04-45C1-4A23-AD16-6A5C8D6EDB24}.Debug|x86.Build.0 = Debug|Win32
-		{B8250D04-45C1-4A23-AD16-6A5C8D6EDB24}.Release|x64.ActiveCfg = Release|x64
-		{B8250D04-45C1-4A23-AD16-6A5C8D6EDB24}.Release|x64.Build.0 = Release|x64
-		{B8250D04-45C1-4A23-AD16-6A5C8D6EDB24}.Release|x86.ActiveCfg = Release|Win32
-		{B8250D04-45C1-4A23-AD16-6A5C8D6EDB24}.Release|x86.Build.0 = Release|Win32
-		{1461B2A3-D313-4A26-B920-27154B3AC21B}.Debug|x64.ActiveCfg = Debug|x64
-		{1461B2A3-D313-4A26-B920-27154B3AC21B}.Debug|x64.Build.0 = Debug|x64
-		{1461B2A3-D313-4A26-B920-27154B3AC21B}.Debug|x86.ActiveCfg = Debug|Win32
-		{1461B2A3-D313-4A26-B920-27154B3AC21B}.Debug|x86.Build.0 = Debug|Win32
-		{1461B2A3-D313-4A26-B920-27154B3AC21B}.Release|x64.ActiveCfg = Release|x64
-		{1461B2A3-D313-4A26-B920-27154B3AC21B}.Release|x64.Build.0 = Release|x64
-		{1461B2A3-D313-4A26-B920-27154B3AC21B}.Release|x86.ActiveCfg = Release|Win32
-		{1461B2A3-D313-4A26-B920-27154B3AC21B}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
