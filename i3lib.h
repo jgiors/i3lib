@@ -3,6 +3,9 @@
 ///@file
 
 #include "i3defs.h"
+#include "i3error.h"
 #include "i3logger.h"
+#include "i3math.h"
+#include "i3prng.h"
 
 #endif //I3LIB_H
