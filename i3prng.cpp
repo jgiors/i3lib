@@ -2,8 +2,59 @@
 #include "i3prng.h"
 #include "i3logger.h"
 #include "i3error.h"
+#include "i3util.h"
 #include "xxh3.h"
 #include <exception>
+#include <ctime>
+
+i3::Prng::Prng()
+{
+    std::vector<std::byte> buffer;
+
+    std::time_t epoch = time(NULL);
+    I3CHECK(epoch > 0);
+    i3::util::pushData(buffer, &epoch, sizeof(epoch));
+
+    *this = Prng(buffer);
+}
+
+/*
+static core::random seedRandom(void)
+{
+    core::profileTimestamp profilerTime;
+    time_t t;
+    unsigned long long tickCount64;
+
+    slog(LOG_INFO, "Seeding PRNG...");
+
+    ///@todo Library wrapper for ISO timestamp.
+    t = time(NULL);
+    assert(t > 0);
+    char isoTimestamp[32];
+    release_assert(strftime(isoTimestamp, sizeof(isoTimestamp), "%F %T", localtime(&t)));
+        
+    slog(LOG_INFO, "timestamp = %s, epoch = %lld [0x%016llx]", isoTimestamp, t, t);
+
+    profilerTime = core::profile_getMonotonicTimestamp();
+    assert(profilerTime > 0);
+    slog(LOG_INFO, "High resolution timestamp = 0x%016" PRIx64, profilerTime);
+
+    tickCount64 = GetTickCount64();
+    slog(LOG_INFO, "GetTickCount64() = %lld [0x%016llx]", tickCount64, tickCount64);
+    assert(tickCount64 > 0);
+
+    core::random seed((uint32_t)t, (uint32_t)(tickCount64 * profilerTime),
+        (uint32_t)(tickCount64 * t), (uint32_t)profilerTime);
+
+    ///@todo Fix up this random seed code. I really want it to print the values before hashing.
+    slog(LOG_NOTICE, "random seed = { 0x%08x, 0x%08x, 0x%08x, 0x%08x }", seed.a, seed.b, seed.c, seed.d);
+
+    core::random rnd(seed);
+    slog(LOG_INFO, "initial random state = { 0x%08x, 0x%08x, 0x%08x, 0x%08x }", rnd.a, rnd.b, rnd.c, rnd.d);
+
+    return rnd;
+}
+*/
 
 i3::Prng::Prng(const i3::Prng &prng, std::vector<std::byte> &parameterBuffer) {
     XXH3_state_t hasher;

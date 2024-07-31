@@ -23,7 +23,8 @@ namespace i3 {
         State _state;
 
     public:
-        Prng() = delete;
+        ///Create a Prng seeded from default time and entropic sources.
+        Prng();
 
         ///Create a Prng, using the hash of a seed buffer to initialize.
         Prng(const std::vector<std::byte> &seed);
