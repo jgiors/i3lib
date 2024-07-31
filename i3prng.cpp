@@ -9,13 +9,21 @@
 
 i3::Prng::Prng()
 {
+    i3log << "Prng::Prng() constructor: Seeding PRNG with time and entropic data...\n";
+
     std::vector<std::byte> buffer;
 
     std::time_t epoch = time(NULL);
+    i3log << "    epoch = " << epoch << "\n";
     I3CHECK(epoch > 0);
     i3::util::pushData(buffer, &epoch, sizeof(epoch));
 
+    ///@todo add more seed data for better entropy, like high res timestamp and computer info
+
+    ///@todo #tentative log buffer contents
+
     *this = Prng(buffer);
+    ///@todo log the seed
 }
 
 /*
