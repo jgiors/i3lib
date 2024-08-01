@@ -6,10 +6,11 @@
 #include "xxh3.h"
 #include <exception>
 #include <ctime>
+//#include <sysinfoapi.h>
 
 i3::Prng::Prng()
 {
-    i3log << "Prng::Prng() constructor: Seeding PRNG with time and entropic data...\n";
+    i3log << "Prng::Prng() constructor: Seeding PRNG with time and entropic data:\n";
 
     std::vector<std::byte> buffer;
 
@@ -18,12 +19,16 @@ i3::Prng::Prng()
     I3CHECK(epoch > 0);
     i3::util::pushData(buffer, &epoch, sizeof(epoch));
 
+    ULONGLONG tickCount64 = GetTickCount64();
+    i3log << "    tickCount64 = " << tickCount64 << "\n";
+    i3::util::pushData(buffer, &tickCount64, sizeof(tickCount64));
+
     ///@todo add more seed data for better entropy, like high res timestamp and computer info
 
     ///@todo #tentative log buffer contents
 
     *this = Prng(buffer);
-    ///@todo log the seed
+    i3log << "    state = (" << _state.a << ", " << _state.b << ", " << _state.c << ", " << _state.d << ")\n"; 
 }
 
 /*
