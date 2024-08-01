@@ -6,7 +6,7 @@
 #include "xxh3.h"
 #include <exception>
 #include <ctime>
-//#include <sysinfoapi.h>
+#include <format>
 
 i3::Prng::Prng()
 {
@@ -25,13 +25,16 @@ i3::Prng::Prng()
 
     HW_PROFILE_INFOA profile;
     I3CHECK_MSG(GetCurrentHwProfileA(&profile) == 0, i3logErr << "error code " << GetLastError());
-    i3log << "     profile: dwDockInfo=" << profile.dwDockInfo << " szHwProfileGuid=" << " szHwProfileGuid=" << profile.szHwProfileGuid << profile.szHwProfileName;
+    i3log << "    profile: dwDockInfo=" << profile.dwDockInfo << " szHwProfileGuid=" << " szHwProfileGuid=" << profile.szHwProfileGuid << profile.szHwProfileName;
     i3::util::pushData(buffer, &profile, sizeof(profile));
 
-    ///@todo #tentative log buffer contents
+    std::string hex;
+    for (std::byte b : buffer)
+        hex += std::format("{:02x}", uint8_t(b));
+    i3log << "    bufferHex  = " << hex << "\n";
 
     *this = Prng(buffer);
-    i3log << "    state = (" << _state.a << ", " << _state.b << ", " << _state.c << ", " << _state.d << ")\n"; 
+    i3log << "    Prng._state = (" << _state.a << ", " << _state.b << ", " << _state.c << ", " << _state.d << ")\n"; 
 }
 
 i3::Prng::Prng(const i3::Prng &prng, std::vector<std::byte> &parameterBuffer) {
