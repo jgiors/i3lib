@@ -25,8 +25,11 @@ i3::Prng::Prng()
     buffer.append(&tickCount64, sizeof(tickCount64));
 
     HW_PROFILE_INFOA profile;
-    I3CHECK_MSG(GetCurrentHwProfileA(&profile) == 0, i3logErr << "error code " << GetLastError());
-    i3log << "    profile: dwDockInfo=" << profile.dwDockInfo << " szHwProfileGuid=" << " szHwProfileGuid=" << profile.szHwProfileGuid << profile.szHwProfileName;
+    I3CHECK_MSG(GetCurrentHwProfileA(&profile) != 0, i3logErr << "error code " << GetLastError() << "\n");
+    i3log << "    profile:"
+        << "\n        profile: dwDockInfo = " << profile.dwDockInfo
+        << "\n        szHwProfileGuid = " << profile.szHwProfileGuid
+        << "\n        szHwProfileGuid = " << profile.szHwProfileName << "\n";
     buffer.append(&profile, sizeof(profile));
 
     std::string hex;
@@ -38,9 +41,18 @@ i3::Prng::Prng()
     i3log << "    Prng._state = (" << _state.a << ", " << _state.b << ", " << _state.c << ", " << _state.d << ")\n"; 
 }
 
+i3::Prng::Prng(const std::vector<std::byte> &seed)
+{
+    XXH3_state_t hasher;
+    I3CHECK(XXH3_128bits_reset(&hasher) == XXH_OK);
+    I3CHECK(XXH3_128bits_update(&hasher, seed.data(), seed.size()) == XXH_OK);
+    XXH128_hash_t h = XXH3_128bits_digest(&hasher);
+    _state = std::bit_cast<State>(h);
+    random32();
+}
+
 i3::Prng::Prng(const i3::Prng &prng, std::vector<std::byte> &parameterBuffer) {
     XXH3_state_t hasher;
-
     I3CHECK(XXH3_128bits_reset(&hasher) == XXH_OK);
     I3CHECK(XXH3_128bits_update(&hasher, parameterBuffer.data(), parameterBuffer.size()) == XXH_OK);
     I3CHECK(XXH3_128bits_update(&hasher, &_state, sizeof(_state)) == XXH_OK);
