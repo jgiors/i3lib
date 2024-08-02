@@ -3,6 +3,7 @@
 #include "i3logger.h"
 #include "i3error.h"
 #include "i3util.h"
+#include "i3byteBuffer.h"
 #include "xxh3.h"
 #include <exception>
 #include <ctime>
@@ -12,21 +13,21 @@ i3::Prng::Prng()
 {
     i3log << "Prng::Prng() constructor: Seeding PRNG with time and entropic data:\n";
 
-    std::vector<std::byte> buffer;
+    i3::ByteBuffer buffer;
 
     std::time_t epoch = time(NULL);
     i3log << "    epoch = " << epoch << "\n";
     I3CHECK(epoch > 0);
-    i3::util::pushData(buffer, &epoch, sizeof(epoch));
+    buffer.append(&epoch, sizeof(epoch));
 
     ULONGLONG tickCount64 = GetTickCount64();
     i3log << "    tickCount64 = " << tickCount64 << "\n";
-    i3::util::pushData(buffer, &tickCount64, sizeof(tickCount64));
+    buffer.append(&tickCount64, sizeof(tickCount64));
 
     HW_PROFILE_INFOA profile;
     I3CHECK_MSG(GetCurrentHwProfileA(&profile) == 0, i3logErr << "error code " << GetLastError());
     i3log << "    profile: dwDockInfo=" << profile.dwDockInfo << " szHwProfileGuid=" << " szHwProfileGuid=" << profile.szHwProfileGuid << profile.szHwProfileName;
-    i3::util::pushData(buffer, &profile, sizeof(profile));
+    buffer.append(&profile, sizeof(profile));
 
     std::string hex;
     for (std::byte b : buffer)

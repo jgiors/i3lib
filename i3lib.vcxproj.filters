@@ -44,5 +44,8 @@
     <ClInclude Include="i3util.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="i3byteBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

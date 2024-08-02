@@ -126,6 +126,7 @@
   <ItemGroup>
     <ClCompile Include="i3logger.cpp" />
     <ClCompile Include="i3prng.cpp" />
+    <ClInclude Include="i3byteBuffer.h" />
     <ClInclude Include="i3error.h" />
     <ClInclude Include="i3logger.h" />
     <ClInclude Include="i3math.h" />
