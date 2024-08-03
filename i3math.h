@@ -1,5 +1,6 @@
 #ifndef I3MATH_H
 #define I3MATH_H
+///@file
 
 namespace i3 {
     namespace math {

@@ -1,5 +1,6 @@
 #ifndef I3DEFS_H
 #define I3DEFS_H
+///@file
 
 ///Is this a debug build?
 #ifdef NDEBUG

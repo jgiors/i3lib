@@ -1,5 +1,6 @@
 #ifndef I3BYTEBUFFER_H
 #define I3BYTEBUFFER_H
+///@file
 
 #include <vector>
 #include <bit>
