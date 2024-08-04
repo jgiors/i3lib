@@ -27,15 +27,17 @@ i3::Prng::Prng()
     HW_PROFILE_INFOA profile;
     I3CHECK_MSG(GetCurrentHwProfileA(&profile) != 0, i3logErr << "error code " << GetLastError() << "\n");
     i3log << "    profile:"
-        << "\n        profile: dwDockInfo = " << profile.dwDockInfo
+        << "\n        dwDockInfo = " << profile.dwDockInfo
         << "\n        szHwProfileGuid = " << profile.szHwProfileGuid
         << "\n        szHwProfileGuid = " << profile.szHwProfileName << "\n";
-    buffer.append(&profile, sizeof(profile));
+    buffer.append(&profile.dwDockInfo, sizeof(profile.dwDockInfo));
+    buffer.append(profile.szHwProfileGuid, strlen(profile.szHwProfileGuid));
+    buffer.append(profile.szHwProfileName, strlen(profile.szHwProfileName));
 
     std::string hex;
     for (std::byte b : buffer)
-        hex += std::format("{:02x}", uint8_t(b));
-    i3log << "    bufferHex  = " << hex << "\n";
+         hex += std::format("{:02x}", uint8_t(b));
+    i3log << "    bufferHex = " << hex << "\n";
 
     *this = Prng(buffer);
     i3log << "    Prng._state = (" << _state.a << ", " << _state.b << ", " << _state.c << ", " << _state.d << ")\n"; 
