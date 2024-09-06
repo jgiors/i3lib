@@ -5,9 +5,9 @@
 ///Is this a debug build?
 #ifdef NDEBUG
 #   define I3DEBUG  0
-#endif
-#   define I3DEBUG  1
 #else
+#   define I3DEBUG  1
+#endif
 
 ///Wrapper for code that only takes effect in debug mode
 #if I3DEBUG
