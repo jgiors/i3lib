@@ -21,6 +21,9 @@
     <ClCompile Include="i3prng.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="precomp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="i3defs.h">
@@ -45,6 +48,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="i3byteBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="precomp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

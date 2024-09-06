@@ -2,10 +2,6 @@
 #define I3UTIL_H
 ///@file
 
-#include <cstdint>
-#include <vector>
-#include <bit>
-
 namespace i3 { namespace util {
 
 } } //namespace i3::util

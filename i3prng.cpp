@@ -1,13 +1,6 @@
 ///@file
-#include "i3prng.h"
-#include "i3logger.h"
-#include "i3error.h"
-#include "i3util.h"
+#include "precomp.h"
 #include "i3byteBuffer.h"
-#include <xxHash/xxh3.h>
-#include <exception>
-#include <ctime>
-#include <format>
 
 i3::Prng::Prng()
 {

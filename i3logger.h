@@ -2,7 +2,9 @@
 #define I3LOGGER_H
 ///@file
 
+#define NOMINMAX    ///<Prevent Windows from defining min() and max() macros which conflict with std lib.
 #include <Windows.h>
+
 #include <memory>
 #include <initializer_list>
 #include <vector>

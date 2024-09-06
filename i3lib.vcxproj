@@ -91,6 +91,8 @@
       <WarningLevel>Level3</WarningLevel>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>../../../libraries;../../../libraries/SFML-2.6.1/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>precomp.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -115,6 +117,8 @@
       <WarningLevel>Level3</WarningLevel>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>../../../libraries;../../../libraries/SFML-2.6.1/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>precomp.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -126,12 +130,17 @@
   <ItemGroup>
     <ClCompile Include="i3logger.cpp" />
     <ClCompile Include="i3prng.cpp" />
+    <ClCompile Include="precomp.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
     <ClInclude Include="i3byteBuffer.h" />
     <ClInclude Include="i3error.h" />
     <ClInclude Include="i3logger.h" />
     <ClInclude Include="i3math.h" />
     <ClInclude Include="i3prng.h" />
     <ClInclude Include="i3util.h" />
+    <ClInclude Include="precomp.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="i3defs.h" />

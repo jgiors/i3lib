@@ -1,4 +1,5 @@
 ///@file
+#include "precomp.h"
 #include "i3logger.h"
 
 i3::Logger i3::Logger::i3log_instance;
