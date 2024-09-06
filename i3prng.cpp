@@ -4,7 +4,7 @@
 #include "i3error.h"
 #include "i3util.h"
 #include "i3byteBuffer.h"
-#include "xxh3.h"
+#include <xxHash/xxh3.h>
 #include <exception>
 #include <ctime>
 #include <format>
