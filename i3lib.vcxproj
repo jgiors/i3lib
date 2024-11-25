@@ -140,7 +140,6 @@
     <ClInclude Include="i3math.h" />
     <ClInclude Include="i3prng.h" />
     <ClInclude Include="i3util.h" />
-    <ClInclude Include="objectPool.h" />
     <ClInclude Include="precomp.h" />
   </ItemGroup>
   <ItemGroup>
